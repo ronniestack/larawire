@@ -40,7 +40,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        if (auth()->user()->role == 0) {
+            $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        }elseif (auth()->user()->role == 1) {
+            $this->redirectIntended(default: route('physician-dashboard', absolute: false), navigate: true);
+        }elseif (auth()->user()->role == 2) {
+            $this->redirectIntended(default: route('admin-dashboard', absolute: false), navigate: true);
+        }
     }
 
     /**
